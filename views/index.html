@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeamCraft - Geliştirici Ekle</title>
+</head>
+<body>
+    <h1>Yeni Geliştirici Profili Ekle</h1>
+    <form action="/add-developer" method="POST">
+        <div>
+            <label for="name">İsim Soyisim:</label>
+            <input type="text" id="name" name="developerName" required>
+        </div>
+        <br>
+        <div>
+            <label for="skills">Yetenekler (Virgülle ayırın):</label>
+            <input type="text" id="skills" name="developerSkills" required>
+        </div>
+        <br>
+        <div>
+            <label for="linkedin">LinkedIn URL:</label>
+            <input type="url" id="linkedin" name="developerLinkedin">
+        </div>
+        <br>
+        <button type="submit">Profili Ekle</button>
+    </form>
+</body>
+</html>
