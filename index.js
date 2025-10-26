@@ -44,6 +44,7 @@ const Developer = mongoose.model('Developer', developerSchema);
 
 // --- Middleware ---
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public')); // statik dosyaları (css, resimler vb.) için 'public' klasörünü kullan
 
 // --- ROTALAR (ROUTES) ---
 // Ana sayfayı (profil ekleme formu) göster
