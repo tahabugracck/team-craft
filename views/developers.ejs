@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeamCraft - Kayıtlı Geliştiriciler</title>
+</head>
+<body>
+    <h1>Kayıtlı Geliştiriciler</h1>
+
+    <% if (developers.length > 0) { %>
+        <ul>
+            <% developers.forEach(dev => { %>
+                <li>
+                    <strong><%= dev.name %></strong> - 
+                    Yetenekler: <%= dev.skills %> 
+                    <% if (dev.linkedin) { %>
+                        - <a href="<%= dev.linkedin %>" target="_blank">LinkedIn</a>
+                    <% } %>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>Henüz kayıtlı geliştirici bulunmuyor.</p>
+    <% } %>
+
+    <br>
+    <a href="/">Yeni Profil Ekle</a>
+</body>
+</html>

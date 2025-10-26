@@ -3,6 +3,10 @@ const path = require('path');
 const mongoose = require('mongoose'); // Mongoose'u dahil ettik.
 
 const app = express();
+
+// view engine olarak EJS'i ayarla
+app.set('view engine', 'ejs'); // exprees'e ejs views klasöründeki ejs uzantılı dosyalara bak.
+
 const PORT = 3000;
 
 // --- MONGODB BAĞLANTISI ---
@@ -70,20 +74,11 @@ app.post('/add-developer', (req, res) => {
 
 // Tüm geliştiricileri listele (GET)
 app.get('/developers', (req, res) => {
-    // Developer modelindeki tüm dökümanları bul ve tarihe göre en yeniden eskiye sırala.
-    Developer.find().sort({ createdAt: -1 })
-        .then((result) => {
-            let html = '<h1>Kayıtlı Geliştiriciler</h1>';
-            html += '<ul>';
-            for (const dev of result) {
-                html += `<li>${dev.name} - Yetenekler: ${dev.skills}</li>`;
-            }
-            html += '</ul>';
-            html += '<a href="/">Yeni Profil Ekle</a>';
-            res.send(html);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.send('Veriler getirilirken bir hata oluştu.');
-        });
+    Developer.find().sort({ createdAt: -1}).then((result) => { // 'developers.ejs' dosyasını render et ve ona 'developers' adında bir değişken gönder.
+        res.render('developers', { developers: result}); // bu değişkenin değeri veritabanından gelen 'result' olacak
+    })
+    .catch((err) => {
+        console.log(err);
+        res.send('veriler getirilirken bir hata oluştu');
+    });
 });
