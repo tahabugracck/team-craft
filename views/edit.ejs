@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeamCraft - Profili Düzenle</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Profili Düzenle</h1>
+        <form action="/developers/update/<%= developer._id %>" method="POST">
+            <div>
+                <label for="name">İsim Soyisim:</label>
+                <input type="text" id="name" name="developerName" required value="<%= developer.name %>">
+            </div>
+            <div>
+                <label for="skills">Yetenekler (Virgülle ayırın):</label>
+                <input type="text" id="skills" name="developerSkills" required value="<%= developer.skills %>">
+            </div>
+            <div>
+                <label for="linkedin">LinkedIn URL:</label>
+                <input type="url" id="linkedin" name="developerLinkedin" value="<%= developer.linkedin %>">
+            </div>
+            <button type="submit">Değişiklikleri Kaydet</button>
+        </form>
+        <br>
+        <a href="/developers/<%= developer._id %>">İptal Et ve Geri Dön</a>
+    </div>
+</body>
+</html>

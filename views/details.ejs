@@ -14,9 +14,10 @@
             <p><strong>LinkedIn:</strong> <a href="<%= developer.linkedin %>" target="_blank"><%= developer.linkedin %></a></p>
             <p><strong>Profil Oluşturulma Tarihi:</strong> <%= developer.createdAt.toLocaleDateString('tr-TR') %></p>
         </div>
+        <a href="/developers/edit/<%= developer._id %>" class="edit-button">Profili Düzenle</a>
 
         <!-- Silme Butonu bir form içinde olmalı -->
-        <form action="/developers/delete/<%= developer._id %>" method="POST">
+        <form action="/developers/delete/<%= developer._id %>" method="POST" style="margin-top: 10px;">
             <button class="delete-button">Profili Sil</button>
         </form>
         <br>

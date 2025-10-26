@@ -92,3 +92,35 @@ app.post('/developers/delete/:id', (req, res) => {
     })
     .catch(err => console.log(err));
 });
+
+// Düzenleme sayfasını göster (GET)
+app.get('/developers/edit/:id', (req, res) => {
+  const id = req.params.id;
+  Developer.findById(id)
+    .then(result => {
+      res.render('edit', { developer: result });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(404).send('Profil bulunamadı');
+    });
+});
+
+// Bir profili güncelle (POST)
+app.post('/developers/update/:id', (req, res) => {
+  const id = req.params.id;
+
+  // 1. Formdan gelen veriyi, veritabanı şemamıza uygun yeni bir objeye aktar.
+  const updatedData = {
+    name: req.body.developerName,
+    skills: req.body.developerSkills,
+    linkedin: req.body.developerLinkedin
+  };
+
+  // 2. findByIdAndUpdate metoduna req.body yerine bu yeni ve doğru objeyi gönder.
+  Developer.findByIdAndUpdate(id, updatedData, { new: true })
+    .then(result => {
+      res.redirect(`/developers/${result._id}`);
+    })
+    .catch(err => console.log(err));
+});

@@ -101,15 +101,32 @@ a:hover {
     font-size: 0.9em;
     color: #555;
 }
-/* style.css'in en altına ekle */
 .profile-details {
     margin-bottom: 20px;
 }
 
 .delete-button {
-    background-color: #dc3545; /* Kırmızı renk */
+    background-color: #dc3545;
 }
 
 .delete-button:hover {
     background-color: #c82333;
+}
+.edit-button {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.edit-button:hover {
+    background-color: #218838;
 }
