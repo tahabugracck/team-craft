@@ -1,37 +1,62 @@
 const express = require('express');
-const path = require('path'); // path modülünü dahil ettik
+const path = require('path');
+const fs = require('fs'); // Node.js'in dosya sistemi modülü
 
 const app = express();
 const PORT = 3000;
 
-// Middleware: Gelen form verilerini (urlencoded) parse etmek için.
-// Bu satır olmadan formdan gelen veriyi 'req.body' içinde göremeyiz!
+// veritabanı dosyamızın yolunu bir değişkene atama
+const dbFilePath = path.join(__dirname, 'data', 'developers.json');
+
 app.use(express.urlencoded({ extended: true }));
 
-// Ana dizine (/) bir GET isteği geldiğinde index.html dosyasını gönder.
+// ana sayfayı (profil ekleme formu) göster
 app.get('/', (req, res) => {
-  // path.join ile işletim sisteminden bağımsız doğru dosya yolunu oluşturuyoruz.
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-// '/add-developer' adresine bir POST isteği geldiğinde çalışacak kod.
+// yeni bir geliştirici profili eklendiğinde çalışacak POST metodu
 app.post('/add-developer', (req, res) => {
-  // Formdan gelen veriler express.urlencoded middleware'i sayesinde req.body objesinde toplanır.
-  const profileData = req.body;
+  // 1) mevcut veritabanı dosyasını oku.
+  const developers = JSON.parse(fs.readFileSync(dbFilePath));
 
-  // 1. Gelen veriyi terminalde görelim (test için).
-  console.log('Yeni profil verisi alındı:', profileData);
+  // 2) formdan gelen yeni veriyi al.
+  const newDeveloper = {
+    id: Date.now(), 
+    name: req.body.developerName,
+    skills: req.body.developerSkills,
+    linkedin: req.body.developerLinkedin
+  };
 
-  // 2. Kullanıcıya verinin alındığına dair bir geri bildirim gösterelim.
-  res.send(`
-    <h1>Profil Alındı!</h1>
-    <p><strong>İsim:</strong> ${profileData.developerName}</p>
-    <p><strong>Yetenekler:</strong> ${profileData.developerSkills}</p>
-    <p><strong>LinkedIn:</strong> ${profileData.developerLinkedin}</p>
-    <a href="/">Yeni Profil Ekle</a>
-  `);
+  // 3) yeni veriyi mevcut listenin sonuna ekle.
+  developers.push(newDeveloper);
+
+  // 4) güncel listeyi tekrar dosyaya yaz. (JSON formatında)
+  fs.writeFileSync(dbFilePath, JSON.stringify(developers, null, 2));   // null, 2 -> Dosyayı daha okunaklı formatlaması için.
+
+  // 5) işlem bittikten sonra kullanıcıyı profillerin listelendiği sayfaya yönlendir.
+  res.redirect('/developers');
+});
+
+// tüm geliştiricileri listeleyecek sayfa
+app.get('/developers', (req, res) => {
+    // 1) veritabanı dosyasını oku
+    const developers = JSON.parse(fs.readFileSync(dbFilePath));
+
+    // 2) her bir developer için bir HTML list item (<li>) oluştur
+    let html = '<h1>Kayıtlı Geliştiriciler</h1><ul>';
+    html += '<u1>';
+    for (const dev of developers) {
+        html += '<li>${dev.name} - Yetenekler: ${dev.skills}</li>';
+    }
+    html += '</ul>';
+    html += '<a href="/">Yeni Profil Ekle</a>';
+        
+    // 3) oluşturulan HTML'i kullanıcıya gönder
+    res.send(html);
 });
 
 app.listen(PORT, () => {
-  console.log(`Sunucu http://localhost:${PORT} adresinde başlatıldı.`);
+    console.log(`Sunucu http://localhost:${PORT} adresinde başlatıldı.`);
 });
+    
