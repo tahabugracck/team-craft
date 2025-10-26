@@ -47,6 +47,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public')); // statik dosyaları (css, resimler vb.) için 'public' klasörünü kullan
 
 // --- ROTALAR (ROUTES) ---
+
 // Ana sayfayı (profil ekleme formu) göster
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
@@ -54,32 +55,40 @@ app.get('/', (req, res) => {
 
 // Yeni bir geliştirici ekle (POST)
 app.post('/add-developer', (req, res) => {
-  // Modelimizi kullanarak yeni bir döküman oluşturuyoruz.
-  const developer = new Developer(
-    {
+    const developer = new Developer({
         name: req.body.developerName,
         skills: req.body.developerSkills,
         linkedin: req.body.developerLinkedin
     });
-
-  // Oluşturulan dökümanı veritabanına kaydet.
-  developer.save()
-    .then((result) => {
-      res.redirect('/developers'); // Kayıt başarılıysa listeleme sayfasına yönlendir.
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send('Bir hata oluştu.');
-    });
+    developer.save()
+    .then((result) => {res.redirect('/developers').catch(err => console.log(err));
+});
 });
 
 // Tüm geliştiricileri listele (GET)
 app.get('/developers', (req, res) => {
-    Developer.find().sort({ createdAt: -1}).then((result) => { // 'developers.ejs' dosyasını render et ve ona 'developers' adında bir değişken gönder.
+    Developer.find().sort({ createdAt: -1})
+    .then((result) => { // 'developers.ejs' dosyasını render et ve ona 'developers' adında bir değişken gönder.
         res.render('developers', { developers: result}); // bu değişkenin değeri veritabanından gelen 'result' olacak
     })
-    .catch((err) => {
-        console.log(err);
-        res.send('veriler getirilirken bir hata oluştu');
+    .catch(err => console.log(err));
+});
+
+// Tek bir geliştiricinin detay sayfasını göster (GET)
+app.get('/developers/:id', (req, res) => {
+    const id = req.params.id; // URL'den gelen id'yi al
+    Developer.findById(id)
+    .then(result => {
+        res.render('details', { developer: result}); 
     });
+});
+
+// Bir geliştiriciyi sil (POST)
+app.post('/developers/delete/:id', (req, res) => {
+    const id = req.params.id;
+    Developer.findByIdAndDelete(id)
+    .then(result => {
+        res.redirect('/developers');
+    })
+    .catch(err => console.log(err));
 });

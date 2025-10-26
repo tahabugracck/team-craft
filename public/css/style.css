@@ -83,3 +83,33 @@ a {
 a:hover {
     text-decoration: underline;
 }
+.developer-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.developer-link li {
+    transition: background-color 0.2s;
+}
+
+.developer-link li:hover {
+    background-color: #d4eaff;
+}
+
+.developer-link span {
+    display: block;
+    font-size: 0.9em;
+    color: #555;
+}
+/* style.css'in en altına ekle */
+.profile-details {
+    margin-bottom: 20px;
+}
+
+.delete-button {
+    background-color: #dc3545; /* Kırmızı renk */
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}

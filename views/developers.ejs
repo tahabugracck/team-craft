@@ -12,13 +12,12 @@
     <% if (developers.length > 0) { %>
         <ul>
             <% developers.forEach(dev => { %>
-                <li>
-                    <strong><%= dev.name %></strong> - 
-                    Yetenekler: <%= dev.skills %> 
-                    <% if (dev.linkedin) { %>
-                        - <a href="<%= dev.linkedin %>" target="_blank">LinkedIn</a>
-                    <% } %>
-                </li>
+                    <a href="/developers/<%= dev._id %>" class="developer-link">
+                        <li>
+                            <strong><%= dev.name %></strong>
+                            <span>Yetenekler: <%= dev.skills %></span>
+                        </li>
+                    </a>
             <% }) %>
         </ul>
     <% } else { %>
