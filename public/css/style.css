@@ -130,3 +130,12 @@ a:hover {
 .edit-button:hover {
     background-color: #218838;
 }
+search-form {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.search-form input {
+    flex-grow: 1; 
+    margin-right: 10px;
+}

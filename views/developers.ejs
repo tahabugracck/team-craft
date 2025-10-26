@@ -7,24 +7,33 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Kayıtlı Geliştiriciler</h1>
+    <div class="container"> <!-- Container eklendi -->
+        <h1>Kayıtlı Geliştiriciler</h1>
 
-    <% if (developers.length > 0) { %>
-        <ul>
-            <% developers.forEach(dev => { %>
+        <!-- ARAMA FORMU -->
+        <form action="/developers" method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Yetenek ara (örn: JavaScript, Python)...">
+            <button type="submit">Ara</button>
+        </form>
+        <!-- ARAMA FORMU SONU -->
+
+        <% if (developers.length > 0) { %>
+            <ul>
+                <% developers.forEach(dev => { %>
                     <a href="/developers/<%= dev._id %>" class="developer-link">
                         <li>
                             <strong><%= dev.name %></strong>
                             <span>Yetenekler: <%= dev.skills %></span>
                         </li>
                     </a>
-            <% }) %>
-        </ul>
-    <% } else { %>
-        <p>Henüz kayıtlı geliştirici bulunmuyor.</p>
-    <% } %>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>Aradığınız kritere uygun geliştirici bulunamadı.</p>
+        <% } %>
 
-    <br>
-    <a href="/">Yeni Profil Ekle</a>
+        <br>
+        <a href="/">Yeni Profil Ekle</a>
+    </div>
 </body>
 </html>
