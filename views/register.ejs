@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TeamCraft - Kayıt Ol</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Kayıt Ol</h1>
+      <form action="/register" method="POST">
+        <div>
+          <label for="email">E-posta Adresi:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div>
+          <label for="password">Şifre:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit">Kayıt Ol</button>
+      </form>
+      <br />
+      <p>Zaten bir hesabın var mı? <a href="/login">Giriş Yap</a></p>
+    </div>
+  </body>
+</html>

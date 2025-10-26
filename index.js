@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const developerRoutes = require("./routes/developerRoutes"); // Rota dosyamızı dahil ettik
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 const PORT = 3000;
@@ -25,4 +26,5 @@ app.use(express.urlencoded({ extended: true }));
 
 // --- ROTALAR (ROUTES) ---
 // Gelen tüm istekleri '/developerRoutes' dosyasına yönlendir.
+app.use(authRoutes);
 app.use(developerRoutes);
