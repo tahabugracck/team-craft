@@ -1,17 +1,16 @@
+<!-- views/add-developer.ejs -->
 <!DOCTYPE html>
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TeamCraft - Geliştirici Ekle</title>
+    <title>TeamCraft - Yeni Profil Ekle</title>
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
     <div class="container">
-      <!-- Daha iyi görünmesi için container eklendi -->
       <h1>Yeni Geliştirici Profili Ekle</h1>
 
-      <!-- DEĞİŞİKLİK BURADA -->
+      <!-- BU SATIRIN BİREBİR AYNI OLDUĞUNDAN EMİN OLUN -->
       <form action="/developers" method="POST">
         <div>
           <label for="name">İsim Soyisim:</label>
@@ -27,6 +26,8 @@
         </div>
         <button type="submit">Profili Ekle</button>
       </form>
+      <br />
+      <a href="/developers">Listeye Geri Dön</a>
     </div>
   </body>
 </html>

@@ -1,9 +1,10 @@
+// index.js
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
-const developerRoutes = require("./routes/developerRoutes"); // Rota dosyamızı dahil ettik
+const developerRoutes = require("./routes/developerRoutes");
 const authRoutes = require("./routes/authRoutes");
 
 const app = express();
@@ -11,7 +12,8 @@ const PORT = 3000;
 
 // --- MONGODB BAĞLANTISI ---
 const dbURI =
-  "mongodb+srv://teamcraft_user:mySuperSecurePassword123@teamcraftcluster.x3yegjt.mongodb.net/?appName=TeamCraftCluster";
+  "mongodb+srv://teamcraft_user:mySuperSecurePassword123@teamcraftcluster.x3yegjt.mongodb.net/TeamCraftDB?retryWrites=true&w=majority&appName=TeamCraftCluster";
+
 mongoose
   .connect(dbURI)
   .then((result) => {
@@ -20,24 +22,29 @@ mongoose
       console.log(`Sunucu http://localhost:${PORT} adresinde başlatıldı.`);
     });
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.error("MongoDB bağlantı hatası:", err));
 
 // --- MIDDLEWARE ---
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
-// --- SESSION MIDDLEWERE ---
 app.use(
   session({
-    secret: "aisşdlfkgjh852", // çerezleri imzalamak için kullanılan bir anahtar.
-    resave: false, // oturum değişmediği sürece tekrar keydetme
-    saveUninitialized: false, // henüz veri eklenmemiş "boş" oturumları kaydetme
-    store: MongoStore.create({ mongoUrl: dbURI }), // oturumları mongoDB'de sakla
+    secret:
+      "bu cok gizli ve karmasik bir anahtar olmali cunku guvenlik icin onemli",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: dbURI }),
   })
 );
 
+app.use((req, res, next) => {
+  res.locals.userId = req.session.userId;
+  next();
+});
+
 // --- ROTALAR (ROUTES) ---
-// Gelen tüm istekleri '/developerRoutes' dosyasına yönlendir.
+// Sıralama önemlidir: Önce kimlik doğrulama, sonra diğerleri.
 app.use(authRoutes);
 app.use(developerRoutes);

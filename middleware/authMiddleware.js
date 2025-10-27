@@ -1,9 +1,19 @@
+// middleware/authMiddleware.js
 const requireAuth = (req, res, next) => {
-  if (req.session.userId) {
-    // eğer session'da userId varsa kullanıcı giriş yaomış demektir. isteğin devamına izin ver.
-    next();
+  console.log(
+    `[Auth Middleware] ${req.method} ${req.originalUrl} için yetki kontrolü yapılıyor...`
+  );
+
+  if (req.session && req.session.userId) {
+    console.log(
+      `[Auth Middleware] Yetki kontrolü başarılı. Session User ID: ${req.session.userId}`
+    );
+    next(); // Kullanıcı giriş yapmış, devam et.
   } else {
-    res.redirect("/login"); // eğer userId yoksa login sayfasına yönlendir.
+    console.log(
+      "[Auth Middleware] Yetki kontrolü BAŞARISIZ. Kullanıcı giriş yapmamış. /login adresine yönlendiriliyor."
+    );
+    res.redirect("/login"); // Kullanıcı giriş yapmamış, yönlendir.
   }
 };
 

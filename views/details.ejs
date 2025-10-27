@@ -1,27 +1,49 @@
+<!-- views/details.ejs -->
 <!DOCTYPE html>
 <html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
     <title>TeamCraft - Profil Detayı</title>
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
     <div class="container">
-        <h1><%= developer.name %></h1>
-        <div class="profile-details">
-            <p><strong>Yetenekler:</strong> <%= developer.skills %></p>
-            <p><strong>LinkedIn:</strong> <a href="<%= developer.linkedin %>" target="_blank"><%= developer.linkedin %></a></p>
-            <p><strong>Profil Oluşturulma Tarihi:</strong> <%= developer.createdAt.toLocaleDateString('tr-TR') %></p>
-        </div>
-        <a href="/developers/edit/<%= developer._id %>" class="edit-button">Profili Düzenle</a>
+      <% if (developer) { %>
+      <h1><%= developer.name %></h1>
+      <div class="profile-details">
+        <p><strong>Yetenekler:</strong> <%= developer.skills %></p>
+        <% if(developer.linkedin) { %>
+        <p>
+          <strong>LinkedIn:</strong>
+          <a href="<%= developer.linkedin %>" target="_blank"
+            ><%= developer.linkedin %></a
+          >
+        </p>
+        <% } %>
+        <p>
+          <strong>Profil Oluşturulma Tarihi:</strong> <%=
+          developer.createdAt.toLocaleDateString('tr-TR') %>
+        </p>
+      </div>
 
-        <!-- Silme Butonu bir form içinde olmalı -->
-        <form action="/developers/delete/<%= developer._id %>" method="POST" style="margin-top: 10px;">
-            <button class="delete-button">Profili Sil</button>
-        </form>
-        <br>
-        <a href="/developers">Tüm Listeye Geri Dön</a>
+      <% if (developer.author && userId && developer.author.toString() ===
+      userId) { %>
+      <a href="/developers/edit/<%= developer._id %>" class="edit-button"
+        >Profili Düzenle</a
+      >
+      <form
+        action="/developers/delete/<%= developer._id %>"
+        method="POST"
+        style="margin-top: 10px"
+      >
+        <button class="delete-button">Profili Sil</button>
+      </form>
+      <% } %> <% } else { %>
+      <h1>Profil Bulunamadı</h1>
+      <% } %>
+
+      <br />
+      <a href="/developers">Tüm Listeye Geri Dön</a>
     </div>
-</body>
+  </body>
 </html>
