@@ -1,5 +1,6 @@
 const express = require("express");
 const Developer = require("../models/developer");
+const { requireAuth } = require("../middleware/authMiddleware");
 
 const router = express.Router(); // app yerine router kullanıyoruz
 
@@ -27,12 +28,12 @@ router.get("/developers", (req, res) => {
 });
 
 // Profil ekleme formunu gösteren yeni bir rota
-router.get("/developers/add", (req, res) => {
+router.get("/developers/add", requireAuth, (req, res) => {
   res.render("add-developer");
 });
 
 // Yeni developer ekle (POST)
-router.post("/developers", (req, res) => {
+router.post("/developers", requireAuth, (req, res) => {
   const developer = new Developer({
     name: req.body.developerName,
     skills: req.body.developerSkills,
@@ -53,7 +54,7 @@ router.get("/developers/:id", (req, res) => {
 });
 
 // Düzenleme sayfasını göster (GET)
-router.get("/developers/edit/:id", (req, res) => {
+router.get("/developers/edit/:id", requireAuth, (req, res) => {
   const id = req.params.id;
   Developer.findById(id)
     .then((result) => res.render("edit", { developer: result }))
@@ -61,7 +62,7 @@ router.get("/developers/edit/:id", (req, res) => {
 });
 
 // Profil güncelle (POST)
-router.post("/developers/update/:id", (req, res) => {
+router.post("/developers/update/:id", requireAuth, (req, res) => {
   const id = req.params.id;
   const updatedData = {
     name: req.body.developerName,
@@ -74,7 +75,7 @@ router.post("/developers/update/:id", (req, res) => {
 });
 
 // Developer sil (POST)
-router.post("/developers/delete/:id", (req, res) => {
+router.post("/developers/delete/:id", requireAuth, (req, res) => {
   const id = req.params.id;
   Developer.findByIdAndDelete(id)
     .then((result) => res.redirect("/developers"))

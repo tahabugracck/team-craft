@@ -54,4 +54,15 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Çıkış yap (GET)
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect("/developers");
+    }
+    res.clearCookie("connect.sid"); // session cookie'sini temizle
+    res.redirect("/login");
+  });
+});
+
 module.exports = router;

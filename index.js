@@ -1,5 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
 const developerRoutes = require("./routes/developerRoutes"); // Rota dosyamızı dahil ettik
 const authRoutes = require("./routes/authRoutes");
 
@@ -23,6 +26,16 @@ mongoose
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+
+// --- SESSION MIDDLEWERE ---
+app.use(
+  session({
+    secret: "aisşdlfkgjh852", // çerezleri imzalamak için kullanılan bir anahtar.
+    resave: false, // oturum değişmediği sürece tekrar keydetme
+    saveUninitialized: false, // henüz veri eklenmemiş "boş" oturumları kaydetme
+    store: MongoStore.create({ mongoUrl: dbURI }), // oturumları mongoDB'de sakla
+  })
+);
 
 // --- ROTALAR (ROUTES) ---
 // Gelen tüm istekleri '/developerRoutes' dosyasına yönlendir.
