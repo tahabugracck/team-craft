@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const flash = require("connect-flash");
 
 const developerRoutes = require("./routes/developerRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -31,16 +32,19 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret:
-      "bu cok gizli ve karmasik bir anahtar olmali cunku guvenlik icin onemli",
+    secret: "asdfghjkl123456789",
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: dbURI }),
   })
 );
 
+app.use(flash());
+
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId;
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
   next();
 });
 

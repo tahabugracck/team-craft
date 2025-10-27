@@ -1,0 +1,15 @@
+<!-- views/partials/navbar.ejs -->
+<nav class="navbar">
+  <a href="/developers" class="navbar-brand">TeamCraft</a>
+  <ul class="navbar-nav">
+    <% if (userId) { %>
+    <li class="nav-item">
+      <a href="/developers/add" class="nav-link">Profil Ekle</a>
+    </li>
+    <li class="nav-item"><a href="/logout" class="nav-link">Çıkış Yap</a></li>
+    <% } else { %>
+    <li class="nav-item"><a href="/login" class="nav-link">Giriş Yap</a></li>
+    <li class="nav-item"><a href="/register" class="nav-link">Kayıt Ol</a></li>
+    <% } %>
+  </ul>
+</nav>
