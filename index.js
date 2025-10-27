@@ -1,4 +1,4 @@
-// index.js
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
@@ -12,8 +12,7 @@ const app = express();
 const PORT = 3000;
 
 // --- MONGODB BAĞLANTISI ---
-const dbURI =
-  "mongodb+srv://teamcraft_user:mySuperSecurePassword123@teamcraftcluster.x3yegjt.mongodb.net/TeamCraftDB?retryWrites=true&w=majority&appName=TeamCraftCluster";
+const dbURI = process.env.DB_URI;
 
 mongoose
   .connect(dbURI)
