@@ -1,6 +1,7 @@
 const express = require("express");
 const Developer = require("../models/developer");
 const { requireAuth } = require("../middleware/authMiddleware");
+const upload = require("../config/multerConfig");
 
 const router = express.Router();
 
@@ -47,29 +48,60 @@ router.get("/developers/add", requireAuth, (req, res) => {
 });
 
 // Yeni bir geliştirici ekleme
-router.post("/developers", requireAuth, (req, res) => {
-  console.log("--- [POST] /developers ---");
-  console.log("Formdan Gelen Veri (req.body):", req.body);
-  console.log("O anki Oturum Bilgisi (req.session):", req.session);
+// Yeni bir geliştirici ekleme
+router.post("/developers", requireAuth, upload.single("cvFile"), (req, res) => {
+  const { developerName, developerSkills, developerLinkedin } = req.body;
 
-  const developer = new Developer({
-    name: req.body.developerName,
-    skills: req.body.developerSkills,
-    linkedin: req.body.developerLinkedin,
+  const newDeveloper = {
+    name: developerName,
+    skills: developerSkills,
+    linkedin: developerLinkedin,
     author: req.session.userId,
-  });
+  };
 
+  if (req.file) {
+    // Eğer bir dosya yüklendiyse, dosya yolunu objeye ekle
+    newDeveloper.cvFilePath = req.file.path;
+  }
+
+  const developer = new Developer(newDeveloper);
   developer
     .save()
-    .then((result) => {
-      console.log("BAŞARILI: Profil veritabanına kaydedildi:", result);
-      res.redirect("/developers");
-    })
-    .catch((err) => {
-      console.error("HATA: Profil kaydedilemedi. Sebep:", err);
-      res.redirect("/developers/add");
-    });
+    .then((result) => res.redirect("/developers"))
+    .catch((err) => console.error("Profil kaydetme hatası:", err));
 });
+
+// Profili güncelle
+router.post(
+  "/developers/update/:id",
+  requireAuth,
+  upload.single("cvFile"),
+  async (req, res) => {
+    try {
+      const developer = await Developer.findById(req.params.id);
+      if (!developer || developer.author.toString() !== req.session.userId) {
+        return res.redirect("/developers");
+      }
+
+      const updatedData = {
+        name: req.body.developerName,
+        skills: req.body.developerSkills,
+        linkedin: req.body.developerLinkedin,
+      };
+
+      if (req.file) {
+        // Eğer yeni bir dosya yüklendiyse, yolu güncelle
+        updatedData.cvFilePath = req.file.path;
+      }
+
+      await Developer.findByIdAndUpdate(req.params.id, updatedData);
+      res.redirect(`/developers/${req.params.id}`);
+    } catch (error) {
+      console.error("Güncelleme hatası:", error);
+      res.redirect("/developers");
+    }
+  }
+);
 
 // Tek bir geliştiricinin detayını göster
 router.get("/developers/:id", (req, res) => {

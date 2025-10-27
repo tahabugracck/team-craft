@@ -24,6 +24,16 @@
           <strong>Profil Oluşturulma Tarihi:</strong> <%=
           developer.createdAt.toLocaleDateString('tr-TR') %>
         </p>
+        <% if (developer.cvFilePath) { %>
+        <p>
+          <strong>CV:</strong>
+          <a
+            href="/<%= developer.cvFilePath.replace('public\\', '') %>"
+            target="_blank"
+            >CV'yi Görüntüle/İndir</a
+          >
+        </p>
+        <% } %>
       </div>
 
       <% if (developer.author && userId && developer.author.toString() ===

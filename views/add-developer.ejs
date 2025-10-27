@@ -1,4 +1,3 @@
-<!-- views/add-developer.ejs -->
 <!DOCTYPE html>
 <html lang="tr">
   <head>
@@ -9,9 +8,7 @@
   <body>
     <div class="container">
       <h1>Yeni Geliştirici Profili Ekle</h1>
-
-      <!-- BU SATIRIN BİREBİR AYNI OLDUĞUNDAN EMİN OLUN -->
-      <form action="/developers" method="POST">
+      <form action="/developers" method="POST" enctype="multipart/form-data">
         <div>
           <label for="name">İsim Soyisim:</label>
           <input type="text" id="name" name="developerName" required />
@@ -23,6 +20,10 @@
         <div>
           <label for="linkedin">LinkedIn URL:</label>
           <input type="url" id="linkedin" name="developerLinkedin" />
+        </div>
+        <div>
+          <label for="cv">CV Yükle (.pdf, .docx):</label>
+          <input type="file" id="cv" name="cvFile" />
         </div>
         <button type="submit">Profili Ekle</button>
       </form>

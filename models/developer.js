@@ -12,6 +12,9 @@ const developerSchema = new Schema(
       ref: "User",
       required: true,
     },
+    cvFilePath: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
