@@ -1,15 +1,28 @@
 <!-- views/partials/navbar.ejs -->
-<nav class="navbar">
-  <a href="/developers" class="navbar-brand">TeamCraft</a>
-  <ul class="navbar-nav">
-    <% if (userId) { %>
-    <li class="nav-item">
-      <a href="/developers/add" class="nav-link">Profil Ekle</a>
-    </li>
-    <li class="nav-item"><a href="/logout" class="nav-link">Çıkış Yap</a></li>
-    <% } else { %>
-    <li class="nav-item"><a href="/login" class="nav-link">Giriş Yap</a></li>
-    <li class="nav-item"><a href="/register" class="nav-link">Kayıt Ol</a></li>
-    <% } %>
-  </ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/developers">TeamCraft</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <% if (userId) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/developers/add">Profil Ekle</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Çıkış Yap</a>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Giriş Yap</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Kayıt Ol</a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
 </nav>

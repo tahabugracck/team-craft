@@ -1,47 +1,35 @@
-<!DOCTYPE html>
-<html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>TeamCraft - Geliştiriciler</title>
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <%- include('./partials/navbar') %>
+<!-- views/developers.ejs -->
 
-    <div class="container">
-      <%- include('./partials/messages') %>
+<h1>Kayıtlı Geliştiriciler</h1>
 
-      <h1>Kayıtlı Geliştiriciler</h1>
-
-      <!-- ARAMA FORMU -->
-      <form action="/developers" method="GET" class="search-form">
-        <input
-          type="text"
-          name="search"
-          placeholder="Yetenek ara (örn: JavaScript, Python)..."
-        />
-        <button type="submit">Ara</button>
-      </form>
-      <!-- ARAMA FORMU SONU -->
-
-      <% if (developers.length > 0) { %>
-      <ul>
-        <% developers.forEach(dev => { %>
-        <a href="/developers/<%= dev._id %>" class="developer-link">
-          <li>
-            <strong><%= dev.name %></strong>
-            <span>Yetenekler: <%= dev.skills %></span>
-          </li>
-        </a>
-        <% }) %>
-      </ul>
-      <% } else { %>
-      <p>Aradığınız kritere uygun geliştirici bulunamadı.</p>
-      <% } %>
-
-      <br />
-      <!-- DEĞİŞİKLİK BURADA -->
-      <a href="/developers/add">Yeni Profil Ekle</a>
+<!-- Arama Formu -->
+<form action="/developers" method="GET" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Yetenek ara (örn: JavaScript, Python)..." value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+        <button class="btn btn-primary" type="submit">Ara</button>
     </div>
-  </body>
-</html>
+</form>
+
+<% if (developers.length > 0) { %>
+    <div class="row">
+        <% developers.forEach(dev => { %>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= dev.name %></h5>
+                        <p class="card-text">
+                            <strong>Yetenekler:</strong> <%= dev.skills %>
+                        </p>
+                        <a href="/developers/<%= dev._id %>" class="btn btn-outline-primary">Profili Görüntüle</a>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+<% } else { %>
+    <p class="text-center">Aradığınız kritere uygun geliştirici bulunamadı.</p>
+<% } %>
+
+<div class="mt-4">
+    <a href="/developers/add" class="btn btn-success">Yeni Profil Ekle</a>
+</div>

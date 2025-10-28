@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
@@ -26,6 +27,7 @@ mongoose
 
 // --- MIDDLEWARE ---
 app.set("view engine", "ejs");
+app.use(expressLayouts);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
