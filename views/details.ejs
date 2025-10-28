@@ -1,59 +1,54 @@
-<!-- views/details.ejs -->
-<!DOCTYPE html>
-<html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>TeamCraft - Profil Detayı</title>
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <% if (developer) { %>
-      <h1><%= developer.name %></h1>
-      <div class="profile-details">
-        <p><strong>Yetenekler:</strong> <%= developer.skills %></p>
-        <% if(developer.linkedin) { %>
-        <p>
-          <strong>LinkedIn:</strong>
-          <a href="<%= developer.linkedin %>" target="_blank"
-            ><%= developer.linkedin %></a
-          >
-        </p>
-        <% } %>
-        <p>
-          <strong>Profil Oluşturulma Tarihi:</strong> <%=
-          developer.createdAt.toLocaleDateString('tr-TR') %>
-        </p>
-        <% if (developer.cvFilePath) { %>
-        <p>
-          <strong>CV:</strong>
-          <a
-            href="/<%= developer.cvFilePath.replace('public\\', '') %>"
-            target="_blank"
-            >CV'yi Görüntüle/İndir</a
-          >
-        </p>
-        <% } %>
-      </div>
-
-      <% if (developer.author && userId && developer.author.toString() ===
-      userId) { %>
-      <a href="/developers/edit/<%= developer._id %>" class="edit-button"
-        >Profili Düzenle</a
-      >
-      <form
-        action="/developers/delete/<%= developer._id %>"
-        method="POST"
-        style="margin-top: 10px"
-      >
-        <button class="delete-button">Profili Sil</button>
-      </form>
-      <% } %> <% } else { %>
-      <h1>Profil Bulunamadı</h1>
-      <% } %>
-
-      <br />
-      <a href="/developers">Tüm Listeye Geri Dön</a>
+<div class="card">
+    <div class="card-header">
+        <h2>Profil Detayı</h2>
     </div>
-  </body>
-</html>
+    <div class="card-body">
+        <% if (developer) { %>
+            <h3 class="card-title"><%= developer.name %></h3>
+            <hr>
+            
+            <p><strong>Yetenekler:</strong> <%= developer.skills %></p>
+
+            <% if(developer.linkedin) { %>
+                <p>
+                    <strong>LinkedIn:</strong>
+                    <a href="<%= developer.linkedin %>" target="_blank"><%= developer.linkedin %></a>
+                </p>
+            <% } %>
+
+            <p>
+                <strong>Profil Oluşturulma Tarihi:</strong> 
+                <%= developer.createdAt.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+            </p>
+
+            <% if (developer.cvFilePath) { %>
+                <p>
+                    <strong>CV:</strong>
+                    <a href="/<%= developer.cvFilePath.replace('public\\', '').replace('public/', '') %>" target="_blank" class="btn btn-sm btn-info">CV'yi Görüntüle/İndir</a>
+                </p>
+            <% } %>
+
+            <!-- Butonlar - Sadece profil sahibine görünür -->
+            <% if (developer.author && userId && developer.author.toString() === userId) { %>
+                <hr>
+                <div class="d-flex gap-2">
+                    <a href="/developers/edit/<%= developer._id %>" class="btn btn-warning">Profili Düzenle</a>
+                    
+                    <form 
+                        action="/developers/delete/<%= developer._id %>" 
+                        method="POST" 
+                        onsubmit="return confirm('Bu profili kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.');"
+                    >
+                        <button type="submit" class="btn btn-danger">Profili Sil</button>
+                    </form>
+                </div>
+            <% } %>
+
+        <% } else { %>
+            <h1 class="text-center">Profil Bulunamadı</h1>
+        <% } %>
+    </div>
+    <div class="card-footer">
+        <a href="/developers" class="btn btn-secondary">Tüm Listeye Geri Dön</a>
+    </div>
+</div>
