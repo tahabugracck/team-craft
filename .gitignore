@@ -1,2 +1,8 @@
+# Bağımlılıklar
 node_modules
+
+# Ortam Değişkenleri
 .env
+
+# Kullanıcı tarafından yüklenen dosyalar
+/public/uploads

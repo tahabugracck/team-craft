@@ -2,6 +2,7 @@ const express = require("express");
 const Developer = require("../models/developer");
 const { requireAuth } = require("../middleware/authMiddleware");
 const upload = require("../config/multerConfig");
+const { parseCvForSkills } = require("../services/cvParserService");
 
 const router = express.Router();
 
@@ -48,27 +49,41 @@ router.get("/developers/add", requireAuth, (req, res) => {
 });
 
 // Yeni bir geliştirici ekleme
-// Yeni bir geliştirici ekleme
-router.post("/developers", requireAuth, upload.single("cvFile"), (req, res) => {
-  const { developerName, developerSkills, developerLinkedin } = req.body;
+router.post('/developers', requireAuth, upload.single('cvFile'), async (req, res) => {
+    try {
+        let skills = req.body.developerSkills;
 
-  const newDeveloper = {
-    name: developerName,
-    skills: developerSkills,
-    linkedin: developerLinkedin,
-    author: req.session.userId,
-  };
+        if (req.file && !skills) {
+            console.log(`CV dosyası bulundu: ${req.file.path}. Yetenekler ayrıştırılıyor...`);
+            const extractedSkills = await parseCvForSkills(req.file.path);
+            if (extractedSkills) {
+                console.log(`Bulunan yetenekler: ${extractedSkills}`);
+                skills = extractedSkills;
+            }
+        }
 
-  if (req.file) {
-    // Eğer bir dosya yüklendiyse, dosya yolunu objeye ekle
-    newDeveloper.cvFilePath = req.file.path;
-  }
+        const newDeveloper = {
+            name: req.body.developerName,
+            skills: skills,
+            linkedin: req.body.developerLinkedin,
+            author: req.session.userId,
+        };
 
-  const developer = new Developer(newDeveloper);
-  developer
-    .save()
-    .then((result) => res.redirect("/developers"))
-    .catch((err) => console.error("Profil kaydetme hatası:", err));
+        if (req.file) {
+            newDeveloper.cvFilePath = req.file.path;
+        }
+
+        const developer = new Developer(newDeveloper);
+        await developer.save();
+        
+        req.flash('success_msg', 'Profil başarıyla oluşturuldu!');
+        res.redirect('/developers');
+
+    } catch (err) {
+        console.error("Profil kaydetme hatası:", err);
+        req.flash('error_msg', 'Profil oluşturulurken bir hata oluştu.');
+        res.redirect('/developers/add');
+    }
 });
 
 // Profili güncelle
