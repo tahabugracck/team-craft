@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret: "asdfghjkl123456789",
+    secret: "bu cok gizli ve karmasik bir anahtar olmali cunku guvenlik icin onemli",
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: dbURI }),
@@ -42,14 +42,15 @@ app.use(
 
 app.use(flash());
 
+// Kullanıcı ve flash mesajları bilgisini tüm view'lara göndermek için middleware
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId;
   res.locals.success_msg = req.flash("success_msg");
   res.locals.error_msg = req.flash("error_msg");
+  res.locals.info_msg = req.flash("info_msg"); // info_msg eklendi
   next();
 });
 
 // --- ROTALAR (ROUTES) ---
-// Sıralama önemlidir: Önce kimlik doğrulama, sonra diğerleri.
 app.use(authRoutes);
 app.use(developerRoutes);
