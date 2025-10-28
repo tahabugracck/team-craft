@@ -1,11 +1,18 @@
-<!-- views/developers.ejs -->
-
-<h1>Kayıtlı Geliştiriciler</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Kayıtlı Geliştiriciler</h1>
+    <a href="/developers/add" class="btn btn-success">Yeni Profil Ekle</a>
+</div>
 
 <!-- Arama Formu -->
 <form action="/developers" method="GET" class="mb-4">
     <div class="input-group">
-        <input type="text" name="search" class="form-control" placeholder="Yetenek ara (örn: JavaScript, Python)..." value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+        <input 
+            type="text" 
+            name="search" 
+            class="form-control" 
+            placeholder="Yetenek ara (örn: JavaScript, Python)..." 
+            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+        >
         <button class="btn btn-primary" type="submit">Ara</button>
     </div>
 </form>
@@ -14,37 +21,37 @@
     <div class="row">
         <% developers.forEach(dev => { %>
             <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title"><%= dev.name %></h5>
                         <p class="card-text">
                             <strong>Yetenekler:</strong> <%= dev.skills %>
                         </p>
-                        <a href="/developers/<%= dev._id %>" class="btn btn-outline-primary">Profili Görüntüle</a>
+                        <a href="/developers/<%= dev._id %>" class="btn btn-outline-primary mt-auto">Profili Görüntüle</a>
                     </div>
                 </div>
             </div>
         <% }) %>
     </div>
 <% } else { %>
-    <p class="text-center">Aradığınız kritere uygun geliştirici bulunamadı.</p>
+    <div class="alert alert-info text-center">
+        Aradığınız kritere uygun geliştirici bulunamadı.
+    </div>
 <% } %>
 
+<!-- Pagination -->
 <% if (totalPages > 1) { %>
-    <nav class="mt-4">
+    <nav class="mt-4" aria-label="Sayfalar arasında gezinme">
         <ul class="pagination justify-content-center">
             
-            <!-- Önceki Sayfa Linki -->
             <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
                 <a class="page-link" href="/developers?page=<%= currentPage - 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>">Önceki</a>
             </li>
 
-            <!-- Sayfa Numaraları (Basit versiyon) -->
             <li class="page-item active" aria-current="page">
                 <span class="page-link"><%= currentPage %> / <%= totalPages %></span>
             </li>
 
-            <!-- Sonraki Sayfa Linki -->
             <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
                 <a class="page-link" href="/developers?page=<%= parseInt(currentPage) + 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>">Sonraki</a>
             </li>
@@ -52,7 +59,3 @@
         </ul>
     </nav>
 <% } %>
-
-<div class="mt-4">
-    <a href="/developers/add" class="btn btn-success">Yeni Profil Ekle</a>
-</div>
