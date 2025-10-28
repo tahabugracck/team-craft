@@ -13,31 +13,35 @@ router.get("/", (req, res) => {
 });
 
 // Tüm geliştiricileri listele
-router.get("/developers", (req, res) => {
-  const searchQuery = req.query.search;
-  let filter = {};
+router.get('/developers', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1; 
+        const limit = 6; 
+        const skip = (page - 1) * limit; 
 
-  console.log("[GET] /developers isteği alındı.");
-  if (searchQuery) {
-    filter = { skills: { $regex: searchQuery, $options: "i" } };
-    console.log("Arama filtresi uygulandı:", filter);
-  } else {
-    console.log("Arama filtresi yok, tüm geliştiriciler listelenecek.");
-  }
+        const searchQuery = req.query.search;
+        let filter = {};
+        if (searchQuery) {
+            filter = { skills: { $regex: searchQuery, $options: 'i' } };
+        }
 
-  Developer.find(filter)
-    .sort({ createdAt: -1 })
-    .then((developers) => {
-      console.log(`Toplam ${developers.length} geliştirici bulundu.`);
-      res.render("developers", {
-        developers: developers,
-        searchQuery: searchQuery,
-      });
-    })
-    .catch((err) => {
-      console.error("Developer listeleme hatası:", err);
-      res.status(500).send("Bir hata oluştu.");
-    });
+        const totalDevelopers = await Developer.countDocuments(filter);
+
+        const developers = await Developer.find(filter)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        res.render('developers', {
+            developers: developers,
+            searchQuery: searchQuery,
+            currentPage: page,
+            totalPages: Math.ceil(totalDevelopers / limit) 
+        });
+    } catch (err) {
+        console.error("Developer listeleme hatası:", err);
+        res.status(500).send("Bir hata oluştu.");
+    }
 });
 
 // Profil ekleme sayfasını göster

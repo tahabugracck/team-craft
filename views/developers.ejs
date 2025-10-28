@@ -30,6 +30,29 @@
     <p class="text-center">Aradığınız kritere uygun geliştirici bulunamadı.</p>
 <% } %>
 
+<% if (totalPages > 1) { %>
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            
+            <!-- Önceki Sayfa Linki -->
+            <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                <a class="page-link" href="/developers?page=<%= currentPage - 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>">Önceki</a>
+            </li>
+
+            <!-- Sayfa Numaraları (Basit versiyon) -->
+            <li class="page-item active" aria-current="page">
+                <span class="page-link"><%= currentPage %> / <%= totalPages %></span>
+            </li>
+
+            <!-- Sonraki Sayfa Linki -->
+            <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                <a class="page-link" href="/developers?page=<%= parseInt(currentPage) + 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>">Sonraki</a>
+            </li>
+
+        </ul>
+    </nav>
+<% } %>
+
 <div class="mt-4">
     <a href="/developers/add" class="btn btn-success">Yeni Profil Ekle</a>
 </div>
